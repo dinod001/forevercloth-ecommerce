@@ -5,7 +5,8 @@ import Title from '../components/Title';
 import ProductItem from '../components/ProductItem';
 
 const Collection = () => {
-  const { products } = useContext(ShopContext);
+
+  const{products,search,showSearch} = useContext(ShopContext)
   const [showFilter, setShowFilter] = useState(false);
   const [filterProducts, setFilterProducts] = useState([])
   const [category, setCategory] = useState([])
@@ -32,6 +33,10 @@ const Collection = () => {
 
   const applyFilter = () => {
     let productCopy = products.slice();
+
+    if(showSearch && search){
+      productCopy = productCopy.filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
+    }
 
     if (category.length > 0) {
       productCopy = productCopy.filter(item => category.includes(item.category))
@@ -63,7 +68,7 @@ const Collection = () => {
 
   useEffect(() => {
     applyFilter()
-  }, [subcategory,category])
+  }, [subcategory,category,search,showSearch])
 
   useEffect(()=>{
     setProduct()
@@ -122,7 +127,7 @@ const Collection = () => {
 
       {/*Right side*/}
       <div className='flex-1'>
-        <div className='lex justify-between text-base sm:text-2xl mb-4'>
+        <div className='flex justify-between text-base sm:text-2xl mb-4'>
           <Title text1={'ALL'} text2={'COLLECTIONS'} />
           {/*Product Sort */}
             <select onChange={(e)=>setSortType(e.target.value)} className='border-2 border-gray-300 text-sm px-2'>
